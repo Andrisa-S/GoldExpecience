@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Experience – 7 Meses</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --gold: #D4A017;
+    --gold-bright: #FFD700;
+    --gold-pale: #F5E6A3;
+    --purple-deep: #1A0A2E;
+    --purple-mid: #2D1054;
+    --purple-accent: #7B2FBE;
+    --green-life: #4ADE80;
+    --white-soft: #FFF8E7;
+    --shadow-gold: 0 0 30px rgba(212,160,23,0.6);
+    --shadow-gold-sm: 0 0 12px rgba(212,160,23,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #000;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ===== SCREEN 1: INTRO ===== */
+  #screen-intro {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, #0d0520 0%, #000 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 1.5s ease, visibility 1.5s ease;
+  }
+
+  #screen-intro.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--gold-pale);
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    opacity: var(--op, 0.5);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--op, 0.5); transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* Ladybug */
+  .ladybug-container {
+    position: relative;
+    width: 120px; height: 120px;
+    cursor: pointer;
+    margin-bottom: 40px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .ladybug-container:hover { animation: float-fast 1s ease-in-out infinite; }
+
+  @keyframes float-fast {
+    0%, 100% { transform: translateY(0px) scale(1.05); }
+    50% { transform: translateY(-10px) scale(1.08); }
+  }
+
+  .ladybug-glow {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,23,0.4) 0%, transparent 70%);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.3); opacity: 1; }
+  }
+
+  .ladybug-svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 20px rgba(212,160,23,0.8));
+    transition: filter 0.3s ease;
+  }
+
+  .ladybug-container:hover .ladybug-svg {
+    filter: drop-shadow(0 0 40px rgba(255,215,0,1));
+  }
+
+  .intro-text {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-pale);
+    text-align: center;
+    max-width: 380px;
+    padding: 0 20px;
+  }
+
+  .intro-subtitle {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--purple-accent);
+    margin-bottom: 16px;
+    animation: fade-in 2s ease forwards;
+    opacity: 0;
+    animation-delay: 0.5s;
+  }
+
+  .intro-main {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(13px, 3.5vw, 17px);
+    line-height: 1.7;
+    color: var(--gold-pale);
+    animation: fade-in 2s ease forwards;
+    opacity: 0;
+    animation-delay: 1s;
+  }
+
+  .intro-hint {
+    margin-top: 28px;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(245,230,163,0.5);
+    animation: fade-in 2s ease forwards, blink-hint 2s ease-in-out infinite;
+    opacity: 0;
+    animation-delay: 2.5s;
+    letter-spacing: 1px;
+  }
+
+  @keyframes fade-in {
+    to { opacity: 1; }
+  }
+
+  @keyframes blink-hint {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  /* ===== SCREEN 2: STAND MANIFEST ===== */
+  #screen-stand {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease;
+    padding-bottom: 60px;
+  }
+
+  #screen-stand.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Background art */
+  .bg-art {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(45,16,84,0.8) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(123,47,190,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 60% at 10% 50%, rgba(212,160,23,0.1) 0%, transparent 50%),
+      #03010A;
+    z-index: 0;
+  }
+
+  .bg-pattern {
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 60px,
+        rgba(212,160,23,0.025) 60px,
+        rgba(212,160,23,0.025) 62px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 60px,
+        rgba(212,160,23,0.025) 60px,
+        rgba(212,160,23,0.025) 62px
+      );
+    z-index: 0;
+  }
+
+  .stand-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 680px;
+    padding: 40px 24px 0;
+  }
+
+  /* Header */
+  .stand-header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: reveal-down 1s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes reveal-down {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stand-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--purple-accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stand-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(22px, 6vw, 42px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 40%, #FFF8C0 60%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+    filter: drop-shadow(0 0 20px rgba(212,160,23,0.5));
+    line-height: 1.2;
+  }
+
+  .stand-sub {
+    margin-top: 10px;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(9px, 2vw, 12px);
+    letter-spacing: 5px;
+    color: rgba(245,230,163,0.5);
+    text-transform: uppercase;
+  }
+
+  .divider-gold {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 20px auto;
+  }
+
+  /* Month cards */
+  .months-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .month-card {
+    position: relative;
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .month-card.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .month-card-inner {
+    background: linear-gradient(135deg, rgba(45,16,84,0.6) 0%, rgba(26,10,46,0.8) 100%);
+    border: 1px solid rgba(212,160,23,0.2);
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+    padding: 24px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .month-card-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(212,160,23,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .month-card.requiem .month-card-inner {
+    border-color: var(--gold-bright);
+    border-width: 2px;
+    box-shadow: 0 0 40px rgba(212,160,23,0.3), inset 0 0 30px rgba(212,160,23,0.05);
+    background: linear-gradient(135deg, rgba(70,40,120,0.7) 0%, rgba(40,16,80,0.9) 100%);
+  }
+
+  .card-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--purple-accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .month-card.requiem .card-number {
+    color: var(--gold-bright);
+  }
+
+  .card-power {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(14px, 3.5vw, 19px);
+    font-weight: 900;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.4));
+  }
+
+  .month-card.requiem .card-power {
+    background: linear-gradient(90deg, var(--gold-bright), #fff, var(--gold-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: clamp(16px, 4vw, 24px);
+    filter: drop-shadow(0 0 16px rgba(255,215,0,0.8));
+  }
+
+  .card-phrase {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(14px, 3.5vw, 17px);
+    color: var(--white-soft);
+    line-height: 1.8;
+    font-weight: 400;
+  }
+
+  .month-card.requiem .card-phrase {
+    font-size: clamp(15px, 4vw, 19px);
+    color: var(--gold-pale);
+    font-style: italic;
+  }
+
+  .card-accent {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(36px, 10vw, 60px);
+    font-weight: 900;
+    color: rgba(212,160,23,0.06);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Requiem special */
+  .requiem-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    border: 1px solid rgba(212,160,23,0.4);
+    padding: 3px 10px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  /* Final eternal message */
+  .eternal-message {
+    margin-top: 50px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s ease;
+    padding: 0 8px;
+  }
+
+  .eternal-message.revealed {
+    opacity: 1;
+  }
+
+  .eternal-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .eternal-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .eternal-divider-gem {
+    width: 8px; height: 8px;
+    background: var(--gold-bright);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px var(--gold);
+  }
+
+  .eternal-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(10px, 2.5vw, 14px);
+    letter-spacing: 5px;
+    color: var(--purple-accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .eternal-text {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(16px, 4vw, 22px);
+    color: var(--gold-pale);
+    line-height: 1.9;
+    font-style: italic;
+    max-width: 500px;
+    margin: 0 auto 30px;
+  }
+
+  .eternal-signature {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: rgba(245,230,163,0.5);
+  }
+
+  /* Particle effects */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: particle-float var(--dur) ease-out forwards;
+    z-index: 200;
+  }
+
+  @keyframes particle-float {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+
+  /* Audio button */
+  .audio-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 300;
+    background: rgba(26,10,46,0.9);
+    border: 1px solid rgba(212,160,23,0.4);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: none;
+  }
+
+  .audio-btn:hover {
+    background: rgba(212,160,23,0.15);
+    border-color: var(--gold);
+    box-shadow: var(--shadow-gold-sm);
+  }
+
+  /* Requiem overlay flash */
+  .requiem-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    animation: requiem-aura 3s ease-in-out infinite;
+  }
+
+  @keyframes requiem-aura {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .requiem-flash.active { display: block; }
+  .requiem-flash:not(.active) { display: none; }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(212,160,23,0.3);
+    text-transform: uppercase;
+    animation: fade-in-out 2s ease-in-out infinite;
+    z-index: 10;
+    display: none;
+  }
+
+  @keyframes fade-in-out {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.7; }
+  }
+
+  /* GE stamp */
+  .ge-emblem {
+    text-align: center;
+    margin: 20px 0 40px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .ge-emblem.revealed { opacity: 1; }
+  .ge-emblem svg { width: 60px; height: 60px; }
+
+  /* === Responsive === */
+  @media (max-width: 480px) {
+    .month-card-inner { padding: 20px 18px; }
+    .card-accent { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: INTRO -->
+<div id="screen-intro">
+  <div class="stars" id="stars-container"></div>
+
+  <div class="ladybug-container" id="ladybug-btn" title="Clique para manifestar o Stand">
+    <div class="ladybug-glow"></div>
+    <svg class="ladybug-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body shell -->
+      <ellipse cx="50" cy="58" rx="32" ry="28" fill="#C9A000"/>
+      <ellipse cx="50" cy="58" rx="32" ry="28" fill="url(#gold-grad)"/>
+      <!-- Wing divide line -->
+      <line x1="50" y1="32" x2="50" y2="86" stroke="#8B6914" stroke-width="2.5"/>
+      <!-- Spots -->
+      <circle cx="36" cy="52" r="6" fill="#6B4E0C" opacity="0.7"/>
+      <circle cx="64" cy="52" r="6" fill="#6B4E0C" opacity="0.7"/>
+      <circle cx="40" cy="68" r="5" fill="#6B4E0C" opacity="0.7"/>
+      <circle cx="60" cy="68" r="5" fill="#6B4E0C" opacity="0.7"/>
+      <circle cx="50" cy="44" r="4" fill="#6B4E0C" opacity="0.5"/>
+      <!-- Head -->
+      <ellipse cx="50" cy="30" rx="14" ry="12" fill="#2A2A2A"/>
+      <!-- Eyes -->
+      <circle cx="44" cy="27" r="3" fill="#FFD700"/>
+      <circle cx="56" cy="27" r="3" fill="#FFD700"/>
+      <circle cx="45" cy="26" r="1.2" fill="#000"/>
+      <circle cx="57" cy="26" r="1.2" fill="#000"/>
+      <!-- Antennae -->
+      <line x1="44" y1="20" x2="38" y2="10" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="56" y1="20" x2="62" y2="10" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="38" cy="10" r="2" fill="#FFD700"/>
+      <circle cx="62" cy="10" r="2" fill="#FFD700"/>
+      <!-- Shine -->
+      <ellipse cx="38" cy="48" rx="6" ry="4" fill="rgba(255,255,200,0.2)" transform="rotate(-20,38,48)"/>
+      <defs>
+        <radialGradient id="gold-grad" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#FFE566"/>
+          <stop offset="60%" stop-color="#C9A000"/>
+          <stop offset="100%" stop-color="#8B6914"/>
+        </radialGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="intro-text">
+    <p class="intro-subtitle">Gold Experience — Stand do Amor</p>
+    <p class="intro-main">"Você sente isso? É o vento dourado dos nossos 7 meses…"</p>
+    <p class="intro-hint">↑ Clique na joaninha para manifestar o Stand</p>
+  </div>
+</div>
+
+<!-- SCREEN 2: STAND MANIFEST -->
+<div id="screen-stand">
+  <div class="bg-art"></div>
+  <div class="bg-pattern"></div>
+  <div class="requiem-flash" id="requiem-flash"></div>
+
+  <div class="stand-content">
+    <div class="stand-header" id="stand-header">
+      <p class="stand-label">Stand Manifestado</p>
+      <h1 class="stand-title">Gold Experience</h1>
+      <p class="stand-sub">Vento Dourado · 7 Meses</p>
+      <div class="divider-gold"></div>
+    </div>
+
+    <div class="months-grid" id="months-grid">
+      <!-- Cards injected by JS -->
+    </div>
+
+    <div class="ge-emblem" id="ge-emblem">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="40,4 76,28 76,64 40,76 4,64 4,28" stroke="#D4A017" stroke-width="1.5" fill="none" opacity="0.4"/>
+        <polygon points="40,12 68,30 68,60 40,70 12,60 12,30" stroke="#FFD700" stroke-width="1" fill="none" opacity="0.3"/>
+        <circle cx="40" cy="40" r="12" stroke="#D4A017" stroke-width="1.5" fill="none"/>
+        <path d="M34 40 L38 44 L46 34" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="eternal-message" id="eternal-message">
+      <div class="eternal-divider">
+        <div class="eternal-divider-line"></div>
+        <div class="eternal-divider-gem"></div>
+        <div class="eternal-divider-line"></div>
+      </div>
+      <p class="eternal-title">✦ Mensagem Eterna ✦</p>
+      <p class="eternal-text" id="eternal-text"></p>
+      <p class="eternal-signature">— Gold Experience Requiem</p>
+    </div>
+  </div>
+</div>
+
+<!-- Audio (add your mp3) -->
+<audio id="bgm" loop preload="none">
+  <source src="vento.mp3" type="audio/mpeg">
+</audio>
+
+<button class="audio-btn" id="audio-btn">♪ Il Vento D'oro</button>
+<div class="scroll-hint" id="scroll-hint">Role para baixo ↓</div>
+
+<script>
+  // ============ DATA ============
+  const months = [
+    {
+      n: "Primeiro Mês",
+      power: "Vita — O Dom da Vida",
+      phrase: "O Gold Experience tem o poder de dar vida a qualquer coisa. Foi assim que você entrou no meu mundo — e de repente tudo ao redor começou a pulsar, a crescer, a florescer. Você não entrou na minha vida; você deu vida a ela.",
+      requiem: false
+    },
+    {
+      n: "Segundo Mês",
+      power: "Senso — A Amplificação dos Sentidos",
+      phrase: "Quem toca no Gold Experience tem os sentidos multiplicados ao infinito. Desde você, cada momento ficou mais intenso: o café da manhã tem mais sabor, as músicas têm mais camadas, e até o silêncio ao seu lado tem um som próprio.",
+      requiem: false
+    },
+    {
+      n: "Terceiro Mês",
+      power: "Crescita — O Crescimento Inevitável",
+      phrase: "O Stand transforma o inanimado em algo vivo, em constante evolução. Nós crescemos assim — sem perceber, sem forçar. Cada conversa nos plantou em alguém melhor. Somos jardins que se cultivam juntos.",
+      requiem: false
+    },
+    {
+      n: "Quarto Mês",
+      power: "Connessione — A Conexão Além das Palavras",
+      phrase: "Giorno sentia a vida fluindo através do Stand como uma corrente dourada. Eu sinto isso com você: uma conexão que não precisa de explicação, que existe antes das palavras e persiste depois do silêncio. É biológica. É dourada.",
+      requiem: false
+    },
+    {
+      n: "Quinto Mês",
+      power: "Protezione — O Escudo de Ouro",
+      phrase: "O Gold Experience converte qualquer golpe em vida — transforma a dor em impulso vital. Com você, aprendi que proteção não é evitar o mundo, é ter alguém com quem enfrentá-lo. Você é o meu escudo dourado.",
+      requiem: false
+    },
+    {
+      n: "Sexto Mês",
+      power: "Destino — A Vontade que Não Recua",
+      phrase: "Giorno disse: eu, Giorno Giovanna, tenho um sonho. A determinação do Gold Experience não é arrogância — é fé inabalável no que se ama. O meu sonho mais persistente agora tem o seu rosto. E eu não vou recuar.",
+      requiem: false
+    },
+    {
+      n: "Sétimo Mês — REQUIEM",
+      power: "Gold Experience Requiem — O Amor Além do Tempo",
+      phrase: "O Requiem anula qualquer realidade em que você não esteja ao meu lado. Sete meses são sete universos que escolhemos construir juntos. E em cada linha do tempo possível, em cada reset da realidade, o resultado é sempre o mesmo: eu te amo.",
+      requiem: true
+    }
+  ];
+
+  const eternalText = "\"Nenhuma força, nenhuma intenção, nenhuma realidade alternativa poderá desfazer o que construímos. O Requiem não pertence ao Stand — pertence aos nossos sete meses. Feliz aniversário, meu vento dourado.\"";
+
+  // ============ STARS ============
+  const starsContainer = document.getElementById('stars-container');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      --dur: ${2 + Math.random() * 4}s;
+      --delay: ${Math.random() * 4}s;
+      --op: ${0.2 + Math.random() * 0.6};
+      width: ${1 + Math.random() * 2}px;
+      height: ${1 + Math.random() * 2}px;
+    `;
+    starsContainer.appendChild(s);
+  }
+
+  // ============ PARTICLES ============
+  function spawnParticles(x, y) {
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 3 + Math.random() * 8;
+      const colors = ['#FFD700','#D4A017','#FFF8C0','#C9A000','#F5E6A3','#7B2FBE'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 80 + Math.random() * 150;
+      p.style.cssText = `
+        left: ${x}px; top: ${y}px;
+        width: ${size}px; height: ${size}px;
+        background: ${color};
+        box-shadow: 0 0 6px ${color};
+        --dx: ${Math.cos(angle) * dist}px;
+        --dy: ${Math.sin(angle) * dist}px;
+        --dur: ${0.8 + Math.random() * 1}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2000);
+    }
+  }
+
+  // ============ BUILD CARDS ============
+  function buildCards() {
+    const grid = document.getElementById('months-grid');
+    months.forEach((m, i) => {
+      const card = document.createElement('div');
+      card.className = 'month-card' + (m.requiem ? ' requiem' : '');
+      card.innerHTML = `
+        <div class="month-card-inner">
+          ${m.requiem ? '<div class="requiem-badge">✦ Requiem Ativado ✦</div>' : ''}
+          <div class="card-number">${m.n}</div>
+          <div class="card-power">${m.power}</div>
+          <div class="card-phrase">${m.phrase}</div>
+          <div class="card-accent">${String(i + 1).padStart(2,'0')}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  // ============ REVEAL SEQUENCE ============
+  function revealSequence() {
+    const cards = document.querySelectorAll('.month-card');
+    const eternal = document.getElementById('eternal-message');
+    const eternalTxt = document.getElementById('eternal-text');
+    const geEmblem = document.getElementById('ge-emblem');
+    const header = document.getElementById('stand-header');
+    const scrollHint = document.getElementById('scroll-hint');
+    const requiemFlash = document.getElementById('requiem-flash');
+    const audioBtn = document.getElementById('audio-btn');
+
+    header.style.animationDelay = '0.2s';
+
+    cards.forEach((card, i) => {
+      const delay = 600 + i * 900;
+      setTimeout(() => {
+        card.classList.add('revealed');
+        // Spawn particles near card
+        const rect = card.getBoundingClientRect();
+        spawnParticles(rect.left + rect.width / 2, rect.top + 40);
+        if (i === 5) scrollHint.style.display = 'block';
+      }, delay);
+    });
+
+    // After all cards: requiem effects
+    const requiemDelay = 600 + 6 * 900 + 600;
+    setTimeout(() => {
+      requiemFlash.classList.add('active');
+      geEmblem.classList.add('revealed');
+    }, requiemDelay);
+
+    setTimeout(() => {
+      eternalTxt.textContent = eternalText;
+      eternal.classList.add('revealed');
+      scrollHint.style.display = 'none';
+      audioBtn.style.display = 'block';
+    }, requiemDelay + 800);
+  }
+
+  // ============ TRANSITION ============
+  document.getElementById('ladybug-btn').addEventListener('click', function(e) {
+    spawnParticles(e.clientX, e.clientY);
+
+    // Big particle burst
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => spawnParticles(e.clientX + (Math.random()-0.5)*60, e.clientY + (Math.random()-0.5)*60), i * 80);
+    }
+
+    const intro = document.getElementById('screen-intro');
+    const stand = document.getElementById('screen-stand');
+
+    intro.classList.add('hidden');
+
+    setTimeout(() => {
+      stand.classList.add('visible');
+      buildCards();
+      revealSequence();
+      tryPlayAudio();
+    }, 800);
+  });
+
+  // ============ AUDIO ============
+  let audioPlaying = false;
+  const bgm = document.getElementById('bgm');
+  const audioBtn = document.getElementById('audio-btn');
+
+  function tryPlayAudio() {
+    bgm.volume = 0.35;
+    bgm.play().catch(() => {}); // autoplay may be blocked
+    audioPlaying = true;
+    audioBtn.textContent = '⏸ Il Vento D\'oro';
+  }
+
+  audioBtn.addEventListener('click', () => {
+    if (audioPlaying) {
+      bgm.pause();
+      audioPlaying = false;
+      audioBtn.textContent = '♪ Il Vento D\'oro';
+    } else {
+      bgm.play();
+      audioPlaying = true;
+      audioBtn.textContent = '⏸ Il Vento D\'oro';
+    }
+  });
+</script>
+</body>
+</html>
